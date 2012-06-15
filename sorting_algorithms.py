@@ -1,5 +1,5 @@
 def bubble_sort(file):
-    """ Sorts a list of numbers based on the bubble sort algorithm, in place
+    """ Sorts a list of numbers using the bubble sort algorithm, in place
 
     >>> file = [4,7,-9,8,0,1]
     >>> bubble_sort(file)
@@ -17,7 +17,7 @@ def bubble_sort(file):
                 file[i], file[i+1] = file[i+1], file[i]
 
 def selection_sort(file):
-    """ Sorts a list of numbers based on the selection sort algorithm, in place
+    """ Sorts a list of numbers using the selection sort algorithm, in place
 
     >>> file = [4,7,-9,8,0,1]
     >>> selection_sort(file)
@@ -26,6 +26,7 @@ def selection_sort(file):
 
     Args:
         A list of numbers
+
     """
     #Replace one element at a time with the next smallest value
     for outer in range (len(file)-1):
@@ -34,14 +35,14 @@ def selection_sort(file):
                 file[inner], file[outer] = file[outer], file[inner]
 
 def insertion_sort(file):
-    """ Sorts a list of numbers based on the insertion sort algorithm, in place
+    """ Sorts a list of numbers using the insertion sort algorithm, in place
 
     >>> file = [4,7,-9,8,0,1]
     >>> insertion_sort(file)
     >>> print file
     [-9, 0, 1, 4, 7, 8]
 
-    Arguments:
+    Args:
     file -- a list of numbers
 
     """
@@ -54,11 +55,21 @@ def insertion_sort(file):
             current_pos += -1
 
 def quick_sort(file):
-    """ Sorts a list of numbers based on a the quicksort algorithm
+    """ Sorts a list of numbers using the quicksort algorithm
+
+    This implementation of quicksort does not sort in place, and instead
+    returns a concatenation of several dynamically created lists. Thus,
+    it may consume a prohibitive amount of memory for large lists.
 
     >>> file = [4,7,-9,8,0,1]
     >>> quick_sort(file)
     [-9, 0, 1, 4, 7, 8]
+
+    Args:
+        A list of numbers
+
+    Returns:
+        A sorted list of numbers
 
     """
     #Base case
@@ -76,6 +87,45 @@ def quick_sort(file):
     return(quick_sort(small_pile) +
            [pivot]*pivot_count +
            quick_sort(large_pile))
+
+def quick_sort_inplace(file, lower = None, upper = None):
+    """ Sorts a list of numbers using the quick sort algorithm, in place
+
+    This implementation is more memory-efficient for large lists, as it
+    sorts in place.
+
+    >>> file = [4,7,-9,8,0,1]
+    >>> quick_sort_inplace(file)
+    >>> print file
+    [-9, 0, 1, 4, 7, 8]
+
+    Args:
+        A list of numbers
+        Lower bound for the sort, default is zero
+        Upper bound fot the sort, default is the last index of the list
+
+    """
+    #Set default values
+    if lower is None : lower = 0
+    if upper is None : upper = len(file) -1
+    if upper-lower > 0:
+        pivot_value = file[lower]
+        l , h = lower, upper
+        #Increment l and decrement h until file[l] is larger than the
+        #pivot value and file[h] is smaller. A swap can then be made.
+        #The pivot value can then be placed between the larger and
+        #smaller values
+        while h > l:
+            while file[l] <= pivot_value and h > l:
+                l += 1
+            while file[h] > pivot_value and h >= l:
+                h -= 1
+            if h > l:
+                file[l], file[h] = file[h], file[l]
+        file[lower],file[h] = file[h],file[lower]
+        #Recursively sort other subsections of the list
+        quick_sort_inplace(file, lower, h-1)
+        quick_sort_inplace(file, h+1, upper)
 
 if __name__ == "__main__":
     import doctest
