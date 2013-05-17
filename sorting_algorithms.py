@@ -11,11 +11,16 @@ def bubble_sort(file):
 
     """
     for j in range (len(file)): #Iterate through the entire list.
+        swapped = True
         for i in range (len(file) - j - 1): #Iterate up the the outer index
             #Swap until the element being swapped meets it match
             if file[i] > file[i+1]:
+                swapped = True
                 file[i], file[i+1] = file[i+1], file[i]
-
+        #If no swaps were made a whole loop, list is sorted
+        if swapped == False:
+            break
+        
 def selection_sort(file):
     """ Sorts a list of numbers using the selection sort algorithm, in place
 
